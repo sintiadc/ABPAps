@@ -87,6 +87,29 @@ class Home extends StatelessWidget {
                 ],
               ),
             ),
+
+            const SizedBox(height: 50), // Spasi antara bagian atas dan bawah
+            const Center(
+              child: Text(
+                'Popular Food',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color(0xFF6C7E46),
+                ),
+              ),
+            ),
+            const Center(
+              child: Text(
+                'We provide various food recipes with high taste with ratings to see popular food recipes. To see food recipes, go to the "Recipes" menu.',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Color.fromARGB(255, 3, 3, 3),
+                ),
+              ),
+            ),
+
+            
           ],
         ),
       ),
@@ -97,11 +120,12 @@ class Home extends StatelessWidget {
       String imagePath, String description, double fontSize) {
     return Column(
       children: [
+        const SizedBox(height: 10),
         Image.asset(
           imagePath,
           width: 50,
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 10),
         SizedBox(
           width: 115,
           child: Text(
