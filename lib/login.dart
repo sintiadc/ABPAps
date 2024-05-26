@@ -93,7 +93,7 @@ class LoginPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        const Home(), // Navigasi ke halaman login
+                        const HomeNav(), // Navigasi ke halaman login
                   ),
                 );
               },
