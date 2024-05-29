@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'myrecipe.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -15,7 +16,13 @@ class Home extends StatelessWidget {
         actions: <Widget>[
           InkWell(
             onTap: () {
-              // Your code here
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      const MyRecipe(), // Navigasi ke halaman login
+                ),
+              );
             },
             child: Row(
               children: <Widget>[
