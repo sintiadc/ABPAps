@@ -59,6 +59,8 @@ class _CaloriesState extends State<Calories> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
+                filled: true,
+                fillColor: Colors.white,
               ),
             ),
             SizedBox(height: 10.0),
@@ -70,6 +72,8 @@ class _CaloriesState extends State<Calories> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
+                filled: true,
+                fillColor: Colors.white,
               ),
             ),
             SizedBox(height: 10.0),
@@ -81,6 +85,8 @@ class _CaloriesState extends State<Calories> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
+                filled: true,
+                fillColor: Colors.white,
               ),
             ),
             SizedBox(height: 10.0),

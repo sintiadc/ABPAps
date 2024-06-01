@@ -69,6 +69,7 @@ flutter:
   - img/picChildLP2.png
   - img/picChildLP3.png
   - img/calories.png
+  - img/picCamera.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
