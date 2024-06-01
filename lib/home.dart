@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'myrecipe.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         leading: Image.asset(
           'img/brand.png', // Rute gambar
-          width: 800, // Lebar gambar
+          width: 80, // Lebar gambar
         ),
         backgroundColor: const Color(0xFFF5F1EC),
         actions: <Widget>[
@@ -102,7 +102,7 @@ class Home extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Discover Your Health Secret with MealMate!',
                       style: TextStyle(
@@ -112,15 +112,15 @@ class Home extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Image.asset(
                     'img/Pic1Home.png',
                     width: 150,
                   ),
                 ],
               ),
-              const SizedBox(height: 50),
-              const Center(
+              SizedBox(height: 50),
+              Center(
                 child: Text(
                   'Our Services',
                   style: TextStyle(
@@ -130,32 +130,32 @@ class Home extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildServiceItem(
-                      'img/Pic1Home.png',
+                      'img/picChildLP1.png',
                       'Access a variety of healthy recipes. Easily create nutritious and delicious meals at home',
                       10,
                     ),
                     SizedBox(width: 20),
                     _buildServiceItem(
-                      'img/Pic1Home.png',
+                      'img/picChildLP2.png',
                       'Monitor your caloric intake quickly. Achieve your health goals more effectively',
                       10,
                     ),
                     SizedBox(width: 20),
                     _buildServiceItem(
-                      'img/Pic1Home.png',
+                      'img/picChildLP3.png',
                       'Create a healthy menu. Choose favorite ingredients and adjust nutritional proportion.',
                       10,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 50),
+              SizedBox(height: 50),
               Center(
                 child: Column(
                   children: [
@@ -167,7 +167,7 @@ class Home extends StatelessWidget {
                         color: Color(0xFF6C7E46),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     Text(
                       'We provide various food recipes with high taste with ratings to see popular food recipes. To see food recipes, go to the "Recipes" menu.',
                       style: TextStyle(
@@ -176,7 +176,7 @@ class Home extends StatelessWidget {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 30),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -204,12 +204,12 @@ class Home extends StatelessWidget {
       String imagePath, String description, double fontSize) {
     return Column(
       children: [
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         Image.asset(
           imagePath,
           width: 50,
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         SizedBox(
           width: 115,
           child: Text(
@@ -227,41 +227,60 @@ class Home extends StatelessWidget {
 
   Widget _buildPopularFoodItem(int index) {
     List<String> titles = [
-      'Food 1',
-      'Food 2',
-      'Food 3',
-      'Food 4',
-      'Food 5',
-      'Food 6',
-      'Food 7',
-      'Food 8',
-      'Food 9'
+      'Klean Bowl',
+      'Soup Bowl',
+      'Salad Bowl',
+      'Salad Bowl',
+      'Soup Bowl',
+      'Klean Bowl',
+      'Klean Bowl',
+      'Soup Bowl',
+      'Salad Bowl'
     ];
     List<String> imagePaths = [
-      'img/Pic1Home.png',
-      'img/Pic1Home.png',
-      'img/Pic1Home.png',
-      'img/Pic1Home.png',
-      'img/Pic1Home.png',
-      'img/Pic1Home.png',
-      'img/Pic1Home.png',
-      'img/Pic1Home.png',
-      'img/Pic1Home.png',
+      'img/PFPict1.png',
+      'img/PFPict2.png',
+      'img/PFPict3.png',
+      'img/PFPict3.png',
+      'img/PFPict2.png',
+      'img/PFPict1.png',
+      'img/PFPict1.png',
+      'img/PFPict2.png',
+      'img/PFPict3.png',
     ];
 
-    return Column(
-      children: [
-        Image.asset(
-          imagePaths[index % imagePaths.length],
-          width: 80,
-          height: 80,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xFFF5F1EC), // Warna latar belakang kotak
+        border: Border.all(
+          color: const Color(0xFF6C7E46), // Warna pinggiran kotak
+          width: 2.0,
         ),
-        SizedBox(height: 10),
-        Text(
-          titles[index % titles.length],
-          style: TextStyle(fontSize: 12, color: Colors.black),
-        ),
-      ],
+      ),
+      padding: EdgeInsets.all(10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Image.asset(
+              imagePaths[index % imagePaths.length],
+              width: 80,
+              height: 80,
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            titles[index % titles.length],
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.black,
+              fontWeight: FontWeight.bold, // Tebalkan teks
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

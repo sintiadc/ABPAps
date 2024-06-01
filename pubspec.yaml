@@ -62,8 +62,12 @@ flutter:
   - img/LP.png
   - img/picWelcome.png
   - img/Pic1Home.png
-
-  
+  - img/PFPict1.png
+  - img/PFPict2.png
+  - img/PFPict3.png
+  - img/picChildLP1.png
+  - img/picChildLP2.png
+  - img/picChildLP3.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
