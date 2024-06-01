@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'login.dart'; // Sesuaikan dengan file yang benar untuk halaman login
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -247,16 +249,37 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {},
-                child: const Text('Register'),
+                child: const Text('Register',
+                    style: TextStyle(color: Color(0xFF6C7E46))),
               ),
               const SizedBox(height: 50),
-              const Center(
+              Center(
                 // Menggunakan Center untuk menengahkan tulisan "Login account"
-                child: Text(
-                  'Already have an Account ?  Login',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Color(0xFF6C7E46),
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Already have an Account ?  ',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Color(0xFF6C7E46),
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'Login',
+                        style: const TextStyle(
+                          fontWeight:
+                              FontWeight.bold, // Menjadikan teks tebal (bold)
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
+                          },
+                      ),
+                    ],
                   ),
                 ),
               ),
