@@ -16,7 +16,6 @@ class Home extends StatelessWidget {
         actions: <Widget>[
           InkWell(
             onTap: () {
-<<<<<<< HEAD
               showMenu(
                 context: context,
                 position:
@@ -66,17 +65,18 @@ class Home extends StatelessWidget {
                           MyAccountPage(), // Ganti dengan halaman yang sesuai
                     ),
                   );
+                } else if (value == 'My Recipes') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const MyRecipe(), // Navigasi ke halaman MyRecipe
+                    ),
+                  );
+                } else if (value == 'Log Out') {
+                  // Logika untuk logout bisa ditambahkan di sini
                 }
               });
-=======
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      const MyRecipe(), // Navigasi ke halaman login
-                ),
-              );
->>>>>>> 30b3b88bdfbd23a47c6bf609012a14c9c414d52d
             },
             child: Row(
               children: <Widget>[
