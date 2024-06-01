@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'home.dart'; // Pastikan untuk mengimpor home.dart
-
 class HomeNav extends StatefulWidget {
   const HomeNav({super.key});
 

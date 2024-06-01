@@ -52,7 +52,10 @@ class LandingPage extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text('Login'),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(color: Color(0xFF6C7E46)),
+                    ),
                   ),
                   const SizedBox(width: 20), // Memberikan jarak antara tombol
                   ElevatedButton(
@@ -65,7 +68,10 @@ class LandingPage extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text('SignUp'),
+                    child: const Text(
+                      'SignUp',
+                      style: TextStyle(color: Color(0xFF6C7E46)),
+                    ),
                   ),
                 ],
               ),

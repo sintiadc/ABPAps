@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'myrecipe.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -15,6 +16,7 @@ class Home extends StatelessWidget {
         actions: <Widget>[
           InkWell(
             onTap: () {
+<<<<<<< HEAD
               showMenu(
                 context: context,
                 position:
@@ -66,6 +68,15 @@ class Home extends StatelessWidget {
                   );
                 }
               });
+=======
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      const MyRecipe(), // Navigasi ke halaman login
+                ),
+              );
+>>>>>>> 30b3b88bdfbd23a47c6bf609012a14c9c414d52d
             },
             child: Row(
               children: <Widget>[
