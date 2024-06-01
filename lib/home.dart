@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'myrecipe.dart';
+import 'myaccount.dart';
+import 'logout_confirmation_popup.dart'; // Import file popup logout
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -74,7 +76,16 @@ class Home extends StatelessWidget {
                     ),
                   );
                 } else if (value == 'Log Out') {
-                  // Logika untuk logout bisa ditambahkan di sini
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return LogoutConfirmationPopup(); // Menampilkan popup logout
+                    },
+                  ).then((logoutConfirmed) {
+                    if (logoutConfirmed == true) {
+                      // Lakukan proses logout di sini
+                    }
+                  });
                 }
               });
             },
@@ -280,20 +291,6 @@ class Home extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class MyAccountPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('My Account'),
-      ),
-      body: Center(
-        child: Text('This is the My Account page'),
       ),
     );
   }

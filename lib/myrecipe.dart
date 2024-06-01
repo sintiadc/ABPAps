@@ -13,7 +13,6 @@ class MyRecipe extends StatelessWidget {
             children: [
               Text(
                 'My Recipe',
-                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 30),
               )
             ],
           ),
@@ -22,28 +21,19 @@ class MyRecipe extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, 
-                  crossAxisSpacing: 10, 
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
-                  childAspectRatio: 9/16
-                  ),
+                  childAspectRatio: 9 / 16),
               itemCount: 4,
               itemBuilder: (context, index) {
                 return Container(
                   decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: Offset(3, 3)
-                      )
-                    ]
-                  ),
-                  
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [BoxShadow(offset: Offset(3, 3))]),
                 );
               },
-            )
-          )
-        );
+            )));
   }
 }
