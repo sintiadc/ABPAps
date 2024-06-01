@@ -8,24 +8,75 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: Image.asset(
-          'img/brand.png',
-          width: 80,
+          'img/brand.png', // Rute gambar
+          width: 800, // Lebar gambar
         ),
         backgroundColor: const Color(0xFFF5F1EC),
         actions: <Widget>[
           InkWell(
             onTap: () {
-              // Your code here
+              showMenu(
+                context: context,
+                position:
+                    RelativeRect.fromLTRB(100, 80, 0, 0), // Posisi dropdown
+                items: [
+                  PopupMenuItem<String>(
+                    value: 'My Account',
+                    child: Row(
+                      children: [
+                        Icon(Icons.account_circle,
+                            color: Colors.black), // Ikon di sebelah teks
+                        SizedBox(width: 10), // Spasi antara ikon dan teks
+                        Text('My Account'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'My Recipes',
+                    child: Row(
+                      children: [
+                        Icon(Icons.book_rounded,
+                            color: Colors.black), // Ikon di sebelah teks
+                        SizedBox(width: 10), // Spasi antara ikon dan teks
+                        Text('My Recipes'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'Log Out',
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout,
+                            color: Colors.black), // Ikon di sebelah teks
+                        SizedBox(width: 10), // Spasi antara ikon dan teks
+                        Text('Log Out'),
+                      ],
+                    ),
+                  ),
+                ],
+                elevation: 8.0,
+              ).then((value) {
+                if (value == 'My Account') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MyAccountPage(), // Ganti dengan halaman yang sesuai
+                    ),
+                  );
+                }
+              });
             },
             child: Row(
               children: <Widget>[
                 Icon(Icons.person),
-                SizedBox(width: 5),
+                SizedBox(width: 5), // Spasi antara ikon dan teks
                 Text(
                   'Hi, Sintia',
-                  style: TextStyle(color: Colors.black),
+                  style:
+                      TextStyle(color: Colors.black), // Teks dengan warna hitam
                 ),
-                SizedBox(width: 15),
+                SizedBox(width: 15), // Memberikan spasi di sebelah kanan
               ],
             ),
           ),
