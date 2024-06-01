@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'home.dart'; // Pastikan untuk mengimpor home.dart
+import 'recipes.dart';
+
 class HomeNav extends StatefulWidget {
   const HomeNav({super.key});
 
@@ -10,9 +12,9 @@ class HomeNav extends StatefulWidget {
 
 class _HomeNavState extends State<HomeNav> {
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     Home(), // Menambahkan Home sebagai halaman pertama
-    Text('Favorite Page'),
+    Recipes(),
     Text('Search Page'),
     Text('Settings Page'),
   ];
