@@ -10,8 +10,8 @@ class _RecipesState extends State<Recipes> {
   String? _selectedMeal;
   String? _selectedHealth;
 
-  final List<String> _meals = ['Breakfast', 'Lunch', 'Dinner'];
-  final List<String> _health = ['Vegan', 'Vegetarian', 'Gluten-Free'];
+  final List<String?> _meals = ['All', 'Breakfast', 'Lunch', 'Dinner'];
+  final List<String?> _health = ['All', 'Vegan', 'Vegetarian', 'Gluten-Free'];
 
   final List<Map<String, dynamic>> _recipes = [
     {
@@ -60,7 +60,7 @@ class _RecipesState extends State<Recipes> {
       'ingredients': 3,
       'servings': 5,
       'prepTime': '30 mins',
-      'meal': 'Snack',
+      'meal': 'Lunch',
       'health': 'Vegan',
       'image': 'img/PFPict2.png',
     },
@@ -70,10 +70,6 @@ class _RecipesState extends State<Recipes> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F1EC),
-      // appBar: AppBar(
-      //   title: Text('Recipes'),
-      //   automaticallyImplyLeading: false,
-      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -88,7 +84,7 @@ class _RecipesState extends State<Recipes> {
             Row(
               children: [
                 Expanded(
-                  child: DropdownButtonFormField<String>(
+                  child: DropdownButtonFormField<String?>(
                     decoration: InputDecoration(
                       labelText: 'Meal',
                       border: OutlineInputBorder(
@@ -101,7 +97,7 @@ class _RecipesState extends State<Recipes> {
                     items: _meals.map((meal) {
                       return DropdownMenuItem(
                         value: meal,
-                        child: Text(meal),
+                        child: Text(meal!),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -113,7 +109,7 @@ class _RecipesState extends State<Recipes> {
                 ),
                 const SizedBox(width: 20),
                 Expanded(
-                  child: DropdownButtonFormField<String>(
+                  child: DropdownButtonFormField<String?>(
                     decoration: InputDecoration(
                       labelText: 'Health',
                       border: OutlineInputBorder(
@@ -126,7 +122,7 @@ class _RecipesState extends State<Recipes> {
                     items: _health.map((health) {
                       return DropdownMenuItem(
                         value: health,
-                        child: Text(health),
+                        child: Text(health!),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -151,13 +147,13 @@ class _RecipesState extends State<Recipes> {
   Widget _buildRecipeList() {
     List<Map<String, dynamic>> filteredRecipes = _recipes;
 
-    if (_selectedMeal != null) {
+    if (_selectedMeal != null && _selectedMeal != 'All') {
       filteredRecipes = filteredRecipes
           .where((recipe) => recipe['meal'] == _selectedMeal)
           .toList();
     }
 
-    if (_selectedHealth != null) {
+    if (_selectedHealth != null && _selectedHealth != 'All') {
       filteredRecipes = filteredRecipes
           .where((recipe) => recipe['health'] == _selectedHealth)
           .toList();
@@ -219,7 +215,7 @@ class _RecipesState extends State<Recipes> {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF6C7E46), // Button color
+                            backgroundColor: Color(0xFF6C7E46),
                           ),
                           child: const Text(
                             'View Details',
@@ -237,10 +233,4 @@ class _RecipesState extends State<Recipes> {
       },
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: Recipes(),
-  ));
 }
