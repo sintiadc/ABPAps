@@ -70,14 +70,16 @@ class _RecipesState extends State<Recipes> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F1EC),
-      appBar: AppBar(
-        title: Text('Recipes'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Recipes'),
+      //   automaticallyImplyLeading: false,
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 30),
             Text(
               'Filter Recipes',
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),

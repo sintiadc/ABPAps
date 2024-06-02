@@ -13,9 +13,9 @@ class _CreateState extends State<Create> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F1EC),
-      appBar: AppBar(
-        title: Text('Create Recipe'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Create Recipe'),
+      // ),
       body: SingleChildScrollView(
         child: Container(
           color: const Color(0xFFF5F1EC),
@@ -24,7 +24,7 @@ class _CreateState extends State<Create> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 20),
+              SizedBox(height: 30),
               Text(
                 'Nutrient-Rich Menu by You',
                 style: TextStyle(

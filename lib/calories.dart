@@ -17,14 +17,15 @@ class _CaloriesState extends State<Calories> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F1EC),
-      appBar: AppBar(
-        title: Text('Calories'), // Mengganti judul AppBar
-      ),
+      // appBar: AppBar(
+      //   title: Text('Calories'), // Mengganti judul AppBar
+      // ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SizedBox(height: 30),
             Center(
               child: Text(
                 'Calorie Calculator', // Teks di atas tengah
