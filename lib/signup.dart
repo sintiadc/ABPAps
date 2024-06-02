@@ -12,6 +12,63 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   String? _selectedGender;
 
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'img/picSuccessRegist.png', // Rute gambar
+                width: 100, // Lebar gambar
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Success',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color(0xFF6C7E46),
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Your response has been submitted!',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Color.fromARGB(255, 86, 84, 84),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF6C7E46), // Warna hijau
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,7 +244,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 10),
               Container(
-                // Form box untuk body weight
+                // Form box untuk body height
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -248,7 +305,10 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Simulasi keberhasilan pendaftaran
+                  _showSuccessDialog();
+                },
                 child: const Text('Register',
                     style: TextStyle(color: Color(0xFF6C7E46))),
               ),
