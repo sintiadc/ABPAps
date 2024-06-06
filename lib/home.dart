@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'myrecipe.dart';
 import 'myaccount.dart';
+import 'Bookmark.dart';
 import 'logout_confirmation_popup.dart'; // Import file popup logout
 
 class Home extends StatelessWidget {
@@ -46,6 +47,17 @@ class Home extends StatelessWidget {
                     ),
                   ),
                   PopupMenuItem<String>(
+                    value: 'Bookmark',
+                    child: Row(
+                      children: [
+                        Icon(Icons.bookmark,
+                            color: Colors.black), // Ikon di sebelah teks
+                        SizedBox(width: 10), // Spasi antara ikon dan teks
+                        Text('Bookmark'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<String>(
                     value: 'Log Out',
                     child: Row(
                       children: [
@@ -73,6 +85,14 @@ class Home extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) =>
                           const MyRecipe(), // Navigasi ke halaman MyRecipe
+                    ),
+                  );
+                } else if (value == 'Bookmark') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const Bookmark(), // Navigasi ke halaman MyRecipe
                     ),
                   );
                 } else if (value == 'Log Out') {
@@ -171,7 +191,7 @@ class Home extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Popular Food',
+                      'Culinary Creations',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
