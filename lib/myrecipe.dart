@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mealmate/edit_recipe.dart';
 import 'edit_recipe.dart'; // Make sure to import the EditPage
 
 class MyRecipe extends StatelessWidget {
@@ -11,13 +10,9 @@ class MyRecipe extends StatelessWidget {
       backgroundColor: const Color(0xFFF5F1EC),
       appBar: AppBar(
         backgroundColor: const Color(0xFFF5F1EC),
-        title: Row(
-          children: const [
-            Text(
-              'My Recipe',
-              style: TextStyle(color: Colors.black),
-            )
-          ],
+        title: const Text(
+          'My Recipe',
+          style: TextStyle(color: Colors.black),
         ),
       ),
       body: Padding(
@@ -47,11 +42,12 @@ class MyRecipe extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0),
-                    child: SizedBox(
-                      height: 200, // Keep the original height
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
                       child: Image.asset(
                         'img/PFPict1.png',
                         fit: BoxFit.cover,
+                        height: 120,
                       ),
                     ),
                   ),
@@ -62,7 +58,7 @@ class MyRecipe extends StatelessWidget {
                       "Menu Makanan",
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -73,82 +69,77 @@ class MyRecipe extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
                             ),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('Delete Recipe'),
-                                    content: const Text('Are you sure you want to delete this recipe?'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop(); // Close the dialog
-                                        },
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          // Handle the delete action here
-                                          Navigator.of(context).pop(); // Close the dialog
-                                        },
-                                        child: const Text('Delete'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 8),
-                              child: Text(
-                                "Delete",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Delete Recipe'),
+                                  content: const Text(
+                                      'Are you sure you want to delete this recipe?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(); // Close the dialog
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        // Handle the delete action here
+                                        Navigator.of(context)
+                                            .pop(); // Close the dialog
+                                      },
+                                      child: const Text('Delete'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: const Text(
+                            "Delete",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
                             ),
                           ),
                         ),
                         const SizedBox(width: 8), // Space between buttons
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF6C7E46),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF6C7E46),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
                             ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditRecipe(),
-                                ),
-                              );
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 8),
-                              child: Text(
-                                "Edit",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditRecipe(),
                               ),
+                            );
+                          },
+                          child: const Text(
+                            "Edit",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
                             ),
                           ),
                         ),
