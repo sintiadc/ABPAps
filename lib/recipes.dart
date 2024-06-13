@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'detailrecipe.dart';
 
 class Recipes extends StatefulWidget {
@@ -13,58 +15,40 @@ class _RecipesState extends State<Recipes> {
   final List<String?> _meals = ['All', 'Breakfast', 'Lunch', 'Dinner'];
   final List<String?> _health = ['All', 'Vegan', 'Vegetarian', 'Gluten-Free'];
 
-  final List<Map<String, dynamic>> _recipes = [
-    {
-      'name': 'Vegan Breakfast Burrito',
-      'calories': 250,
-      'ingredients': 3,
-      'servings': 2,
-      'prepTime': '15 mins',
-      'meal': 'Breakfast',
-      'health': 'Vegan',
-      'image': 'img/PFPict1.png',
-    },
-    {
-      'name': 'Gluten-Free Pancakes',
-      'calories': 300,
-      'ingredients': 3,
-      'servings': 4,
-      'prepTime': '20 mins',
-      'meal': 'Breakfast',
-      'health': 'Gluten-Free',
-      'image': 'img/PFPict2.png',
-    },
-    {
-      'name': 'Keto Lunch Salad',
-      'calories': 350,
-      'ingredients': 3,
-      'servings': 1,
-      'prepTime': '10 mins',
-      'meal': 'Lunch',
-      'health': 'Keto',
-      'image': 'img/PFPict3.png',
-    },
-    {
-      'name': 'Vegetarian Dinner Stir-fry',
-      'calories': 400,
-      'ingredients': 3,
-      'servings': 3,
-      'prepTime': '25 mins',
-      'meal': 'Dinner',
-      'health': 'Vegetarian',
-      'image': 'img/PFPict1.png',
-    },
-    {
-      'name': 'Snack Bars',
-      'calories': 200,
-      'ingredients': 3,
-      'servings': 5,
-      'prepTime': '30 mins',
-      'meal': 'Lunch',
-      'health': 'Vegan',
-      'image': 'img/PFPict2.png',
-    },
-  ];
+  late Future<List<Map<String, dynamic>>> _futureRecipes;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureRecipes = fetchRecipes();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchRecipes() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:8000/resep/get-recipe/'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body);
+      List<Map<String, dynamic>> recipes = [];
+
+      for (var data in responseData) {
+        recipes.add({
+          'name': data['name'],
+          'calories': data['calories'],
+          'ingredients': data['ingredients'],
+          'servings': data['servings'],
+          'prepTime': data['prep_time'],
+          'meal': data['meal'],
+          'health': data['health'],
+          'image': data['picture'],
+          'detail_resep': data['detail_resep'],
+        });
+      }
+
+      return recipes;
+    } else {
+      throw Exception('Failed to load recipes');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,91 +129,87 @@ class _RecipesState extends State<Recipes> {
   }
 
   Widget _buildRecipeList() {
-    List<Map<String, dynamic>> filteredRecipes = _recipes;
-
-    if (_selectedMeal != null && _selectedMeal != 'All') {
-      filteredRecipes = filteredRecipes
-          .where((recipe) => recipe['meal'] == _selectedMeal)
-          .toList();
-    }
-
-    if (_selectedHealth != null && _selectedHealth != 'All') {
-      filteredRecipes = filteredRecipes
-          .where((recipe) => recipe['health'] == _selectedHealth)
-          .toList();
-    }
-
-    return ListView.builder(
-      itemCount: filteredRecipes.length,
-      itemBuilder: (context, index) {
-        final recipe = filteredRecipes[index];
-        return Card(
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      recipe['image'],
-                      height: 150,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  flex: 3,
-                  child: Column(
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: _futureRecipes,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final List<Map<String, dynamic>> recipes = snapshot.data!;
+          return ListView.builder(
+            itemCount: recipes.length,
+            itemBuilder: (context, index) {
+              final recipe = recipes[index];
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        recipe['name'],
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        flex: 2,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            recipe['image'],
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 5),
-                      Text('Calories: ${recipe['calories']}'),
-                      Text('Ingredients: ${recipe['ingredients']} items'),
-                      Text('Servings: ${recipe['servings']}'),
-                      Text('Prep Time: ${recipe['prepTime']}'),
-                      Text('Meal: ${recipe['meal']}'),
-                      Text('Health: ${recipe['health']}'),
-                      const SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    RecipeDetail(recipe: recipe),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        flex: 3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              recipe['name'],
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF6C7E46),
-                          ),
-                          child: const Text(
-                            'View Details',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text('Calories: ${recipe['calories']}'),
+                            Text('Servings: ${recipe['servings']}'),
+                            Text('Prep Time: ${recipe['prepTime']}'),
+                            Text('Meal: ${recipe['meal']}'),
+                            Text('Health: ${recipe['health']}'),
+                            const SizedBox(height: 10),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RecipeDetail(recipe: recipe),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xFF6C7E46),
+                                ),
+                                child: const Text(
+                                  'View Details',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        );
+              );
+            },
+          );
+        }
       },
     );
   }

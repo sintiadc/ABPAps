@@ -14,13 +14,14 @@ class _RecipeDetailState extends State<RecipeDetail> {
   bool _liked = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F1EC),
-      appBar: AppBar(
-        title: Text(widget.recipe['name']),
-      ),
-      body: Padding(
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: const Color(0xFFF5F1EC),
+    appBar: AppBar(
+      title: Text(widget.recipe['name']),
+    ),
+    body: SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +95,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
                 ],
               ),
             ),
-// Kotak putih dengan informasi ingredients
+            // Kotak putih dengan informasi ingredients
             Container(
               margin: EdgeInsets.symmetric(vertical: 10.0),
               padding: EdgeInsets.all(20.0),
@@ -102,12 +103,10 @@ class _RecipeDetailState extends State<RecipeDetail> {
                 borderRadius: BorderRadius.circular(10.0),
                 color: Colors.white,
               ),
-              width: double
-                  .infinity, // Mengatur lebar menjadi infinity agar mengisi sepanjang layar
+              width: double.infinity, 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize:
-                    MainAxisSize.max, // Menetapkan mainAxisSize menjadi max
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
                     'Ingredients',
@@ -117,19 +116,11 @@ class _RecipeDetailState extends State<RecipeDetail> {
                     ),
                   ),
                   SizedBox(height: 10.0),
-                  Text(
-                    '- Ingredient 1',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  Text(
-                    '- Ingredient 2',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  Text(
-                    '- Ingredient 3',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  // Tambahkan Text sesuai dengan jumlah ingredients yang dimiliki
+                  for (var ingredient in widget.recipe['ingredients'].split(',')) // Updated this line
+                    Text(
+                      '- $ingredient',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
                 ],
               ),
             ),
@@ -141,12 +132,10 @@ class _RecipeDetailState extends State<RecipeDetail> {
                 borderRadius: BorderRadius.circular(10.0),
                 color: Colors.white,
               ),
-              width: double
-                  .infinity, // Mengatur lebar menjadi infinity agar mengisi sepanjang layar
+              width: double.infinity, 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize:
-                    MainAxisSize.max, // Menetapkan mainAxisSize menjadi max
+                mainAxisSize: MainAxisSize.max, 
                 children: [
                   Text(
                     'Instructions',
@@ -156,25 +145,18 @@ class _RecipeDetailState extends State<RecipeDetail> {
                     ),
                   ),
                   SizedBox(height: 10.0),
-                  Text(
-                    '1. Instruction 1',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  Text(
-                    '2. Instruction 2',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  Text(
-                    '3. Instruction 3',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  // Tambahkan Text sesuai dengan jumlah instruksi yang dimiliki
+                  for (var instruction in widget.recipe['detail_resep'].split(',')) // Updated this line
+                    Text(
+                      instruction,
+                      style: TextStyle(fontSize: 16.0),
+                    ),
                 ],
               ),
             ),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
