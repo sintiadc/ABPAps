@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'model_recipe.dart';
 import 'api_service.dart';
+import 'Bookmark.dart';
+import 'myrecipe.dart';
+import 'myaccount.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -40,6 +43,32 @@ class Home extends StatelessWidget {
                   },
                 );
               }
+              else if (value == 'My Recipes') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const MyRecipe(), // Navigasi ke halaman MyRecipe
+                    ),
+                  );
+                } else if (value == 'Bookmark') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const Bookmark(), // Navigasi ke halaman MyRecipe
+                    ),
+                  );
+                }
+                else if (value == 'My Account') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MyAccountPage(), // Ganti dengan halaman yang sesuai
+                    ),
+                  );
+                }
             },
             itemBuilder: (BuildContext context) {
               return [
@@ -53,6 +82,28 @@ class Home extends StatelessWidget {
                     ],
                   ),
                 ),
+                PopupMenuItem<String>(
+                    value: 'My Recipes',
+                    child: Row(
+                      children: [
+                        Icon(Icons.book_rounded,
+                            color: Colors.black), // Ikon di sebelah teks
+                        SizedBox(width: 10), // Spasi antara ikon dan teks
+                        Text('My Recipes'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'Bookmark',
+                    child: Row(
+                      children: [
+                        Icon(Icons.bookmark,
+                            color: Colors.black), // Ikon di sebelah teks
+                        SizedBox(width: 10), // Spasi antara ikon dan teks
+                        Text('Bookmark'),
+                      ],
+                    ),
+                  ),
                 PopupMenuItem<String>(
                   value: 'Log Out',
                   child: Row(
