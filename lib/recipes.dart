@@ -178,7 +178,7 @@ class _RecipesState extends State<Recipes> {
                             const SizedBox(height: 5),
                             Text('Calories: ${recipe['calories']}'),
                             Text('Servings: ${recipe['servings']}'),
-                            Text('Prep Time: ${recipe['prepTime']}'),
+                            Text('Prep Time: ${recipe['prep_time']}'),
                             Text('Meal: ${recipe['meal']}'),
                             Text('Health: ${recipe['health']}'),
                             const SizedBox(height: 10),

@@ -41,6 +41,7 @@ class _HomeState extends State<Home> {
             'meal': item['meal'],
             'health': item['health'],
             'detail_resep': item['detail_resep'],
+            'like': item['like'],
           };
         }).toList();
         return recipes;
