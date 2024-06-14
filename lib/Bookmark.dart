@@ -1,77 +1,114 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'detailrecipe.dart'; // Import RecipeDetail widget
 
-class Bookmark extends StatelessWidget {
+class Bookmark extends StatefulWidget {
   const Bookmark({Key? key}) : super(key: key);
+
+  @override
+  _BookmarkState createState() => _BookmarkState();
+}
+
+class _BookmarkState extends State<Bookmark> {
+  List<dynamic> _bookmarkedRecipes = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBookmarkedRecipes();
+  }
+
+  Future<void> _fetchBookmarkedRecipes() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8000/myresep/getRecipeByUserAndBookmark'),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _bookmarkedRecipes = json.decode(response.body);
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        // Handle error
+        print('Failed to load bookmarked recipes');
+      }
+    } catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
+      print('Error fetching bookmarked recipes: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bookmark'),
-        backgroundColor: const Color(0xFFF5F1EC), // Warna latar belakang AppBar
+        backgroundColor: const Color(0xFFF5F1EC),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: const Color(0xFFF5F1EC),
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Your Bookmarked Recipes',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                  color: Color(0xFF6C7E46),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Container(
+                color: const Color(0xFFF5F1EC),
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Your Bookmarked Recipes',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Color(0xFF6C7E46),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 20.0,
+                        mainAxisSpacing: 20.0,
+                        childAspectRatio: 3 / 4,
+                      ),
+                      itemCount: _bookmarkedRecipes.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RecipeDetail(recipe: _bookmarkedRecipes[index]),
+                              ),
+                            );
+                          },
+                          child: _buildBookmarkItem(_bookmarkedRecipes[index]),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20.0,
-                  mainAxisSpacing: 20.0,
-                  childAspectRatio: 3 / 4, // Rasio aspek kotak bookmark
-                ),
-                itemCount:
-                    6, // Ubah jumlah item sesuai dengan data bookmark Anda
-                itemBuilder: (BuildContext context, int index) {
-                  return _buildBookmarkItem(index);
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
-  Widget _buildBookmarkItem(int index) {
-    List<String> titles = [
-      'Klean Bowl',
-      'Soup Bowl',
-      'Salad Bowl',
-      'Salad Bowl',
-      'Soup Bowl',
-      'Klean Bowl',
-    ];
-    List<String> imagePaths = [
-      'img/PFPict1.png',
-      'img/PFPict2.png',
-      'img/PFPict3.png',
-      'img/PFPict3.png',
-      'img/PFPict2.png',
-      'img/PFPict1.png',
-    ];
-
+  Widget _buildBookmarkItem(dynamic recipe) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: const Color(0xFFF5F1EC), // Warna latar belakang kotak
+        color: const Color(0xFFF5F1EC),
         border: Border.all(
-          color: const Color(0xFF6C7E46), // Warna pinggiran kotak
+          color: const Color(0xFF6C7E46),
           width: 2.0,
         ),
       ),
@@ -80,19 +117,22 @@ class Bookmark extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: Image.asset(
-              imagePaths[index % imagePaths.length],
+            child: Image.network(
+              recipe['picture'],
               width: 100,
               height: 100,
+              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                return const Icon(Icons.broken_image, size: 100, color: Colors.red);
+              },
             ),
           ),
           const SizedBox(height: 10),
           Text(
-            titles[index % titles.length],
+            recipe['name'],
             style: const TextStyle(
               fontSize: 16,
               color: Colors.black,
-              fontWeight: FontWeight.bold, // Tebalkan teks
+              fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),

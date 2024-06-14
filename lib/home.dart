@@ -1,12 +1,56 @@
 import 'package:flutter/material.dart';
-import 'model_recipe.dart';
-import 'api_service.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'detailrecipe.dart'; // Import RecipeDetail widget
 import 'Bookmark.dart';
 import 'myrecipe.dart';
 import 'myaccount.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  late Future<List<Map<String, dynamic>>> _futureRecipes;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureRecipes = fetchRecipes();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchRecipes() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8000/resep/getPopularRecipe'),
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        List<Map<String, dynamic>> recipes = data.map((item) {
+          return {
+            'name': item['name'],
+            'picture': item['picture'],
+            'calories': item['calories'],
+            'ingredients': item['ingredients'],
+            'servings': item['servings'],
+            'prep_time': item['prep_time'],
+            'meal': item['meal'],
+            'health': item['health'],
+            'detail_resep': item['detail_resep'],
+          };
+        }).toList();
+        return recipes;
+      } else {
+        throw Exception('Failed to load recipes');
+      }
+    } catch (error) {
+      throw Exception('Error fetching recipes: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,33 +86,31 @@ class Home extends StatelessWidget {
                     );
                   },
                 );
+              } else if (value == 'My Recipes') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const MyRecipe(), // Navigate to MyRecipe page
+                  ),
+                );
+              } else if (value == 'Bookmark') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const Bookmark(), // Navigate to Bookmark page
+                  ),
+                );
+              } else if (value == 'My Account') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        MyAccountPage(), // Navigate to MyAccount page
+                  ),
+                );
               }
-              else if (value == 'My Recipes') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const MyRecipe(), // Navigasi ke halaman MyRecipe
-                    ),
-                  );
-                } else if (value == 'Bookmark') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const Bookmark(), // Navigasi ke halaman MyRecipe
-                    ),
-                  );
-                }
-                else if (value == 'My Account') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          MyAccountPage(), // Ganti dengan halaman yang sesuai
-                    ),
-                  );
-                }
             },
             itemBuilder: (BuildContext context) {
               return [
@@ -83,27 +125,25 @@ class Home extends StatelessWidget {
                   ),
                 ),
                 PopupMenuItem<String>(
-                    value: 'My Recipes',
-                    child: Row(
-                      children: [
-                        Icon(Icons.book_rounded,
-                            color: Colors.black), // Ikon di sebelah teks
-                        SizedBox(width: 10), // Spasi antara ikon dan teks
-                        Text('My Recipes'),
-                      ],
-                    ),
+                  value: 'My Recipes',
+                  child: Row(
+                    children: [
+                      Icon(Icons.book_rounded, color: Colors.black),
+                      SizedBox(width: 10),
+                      Text('My Recipes'),
+                    ],
                   ),
-                  PopupMenuItem<String>(
-                    value: 'Bookmark',
-                    child: Row(
-                      children: [
-                        Icon(Icons.bookmark,
-                            color: Colors.black), // Ikon di sebelah teks
-                        SizedBox(width: 10), // Spasi antara ikon dan teks
-                        Text('Bookmark'),
-                      ],
-                    ),
+                ),
+                PopupMenuItem<String>(
+                  value: 'Bookmark',
+                  child: Row(
+                    children: [
+                      Icon(Icons.bookmark, color: Colors.black),
+                      SizedBox(width: 10),
+                      Text('Bookmark'),
+                    ],
                   ),
+                ),
                 PopupMenuItem<String>(
                   value: 'Log Out',
                   child: Row(
@@ -210,8 +250,8 @@ class Home extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 30),
-                    FutureBuilder<List<Recipe>>(
-                      future: ApiService().fetchRecipes(),
+                    FutureBuilder<List<Map<String, dynamic>>>(
+                      future: _futureRecipes,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
@@ -228,8 +268,18 @@ class Home extends StatelessWidget {
                             ),
                             itemCount: snapshot.data!.length,
                             itemBuilder: (BuildContext context, int index) {
-                              Recipe recipe = snapshot.data![index];
-                              return _buildPopularFoodItem(recipe);
+                              Map<String, dynamic> recipe = snapshot.data![index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RecipeDetail(recipe: recipe),
+                                    ),
+                                  );
+                                },
+                                child: _buildPopularFoodItem(recipe),
+                              );
                             },
                           );
                         } else {
@@ -268,7 +318,8 @@ class Home extends StatelessWidget {
     );
   }
 
-  Widget _buildPopularFoodItem(Recipe recipe) {
+
+  Widget _buildPopularFoodItem(Map<String, dynamic> recipe) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -283,15 +334,25 @@ class Home extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: Image.network(
-              recipe.imageUrl,
-              width: 80,
-              height: 80,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecipeDetail(recipe: recipe),
+                  ),
+                );
+              },
+              child: Image.network(
+                recipe['picture'],
+                width: 80,
+                height: 80,
+              ),
             ),
           ),
           SizedBox(height: 10),
           Text(
-            recipe.name,
+            recipe['name'],
             style: TextStyle(
               fontSize: 12,
               color: Colors.black,

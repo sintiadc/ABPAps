@@ -32,15 +32,17 @@ class _RecipesState extends State<Recipes> {
 
       for (var data in responseData) {
         recipes.add({
+          'id': data['id'],
           'name': data['name'],
           'calories': data['calories'],
           'ingredients': data['ingredients'],
           'servings': data['servings'],
-          'prepTime': data['prep_time'],
+          'prep_time': data['prep_time'],
           'meal': data['meal'],
           'health': data['health'],
-          'image': data['picture'],
+          'picture': data['picture'],
           'detail_resep': data['detail_resep'],
+          'like': data['like'],
         });
       }
 
@@ -154,7 +156,7 @@ class _RecipesState extends State<Recipes> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
                           child: Image.network(
-                            recipe['image'],
+                            recipe['picture'],
                             height: 150,
                             fit: BoxFit.cover,
                           ),
