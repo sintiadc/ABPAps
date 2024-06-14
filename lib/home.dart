@@ -32,6 +32,7 @@ class _HomeState extends State<Home> {
         List<dynamic> data = json.decode(response.body);
         List<Map<String, dynamic>> recipes = data.map((item) {
           return {
+            'id': item['id'],
             'name': item['name'],
             'picture': item['picture'],
             'calories': item['calories'],

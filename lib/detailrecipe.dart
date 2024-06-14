@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class RecipeDetail extends StatefulWidget {
   final Map<String, dynamic> recipe;
@@ -81,23 +82,49 @@ class _RecipeDetailState extends State<RecipeDetail> {
                     SizedBox(height: 10.0),
                     Row(
                       children: [
+
                         IconButton(
-                          icon: Icon(_liked
-                              ? Icons.thumb_up
-                              : Icons.thumb_up_alt_outlined),
-                          onPressed: () {
+                          icon: Icon(_liked ? Icons.thumb_up : Icons.thumb_up_alt_outlined),
+                          onPressed: () async {
                             setState(() {
                               if (_liked) {
-                                _likeCount--;
+                                _likeCount++;
                               } else {
                                 _likeCount++;
                               }
-                              _liked = !_liked;
+                             
                             });
+
+                            // Send HTTP request to increment like count
+                            final response = await http.get(
+                              Uri.parse('http://10.0.2.2:8000/resep/tambah-like/${widget.recipe['id']}'),
+                            );
+
+                            if (response.statusCode == 200) {
+                              // Successfully incremented like count
+                              // Update UI or handle response data as needed
+                              // Example: Update like count from response data if necessary
+                              // final responseData = json.decode(response.body);
+                              // _likeCount = responseData['new_like_count'];
+                            } else {
+                              // Failed to increment like count, handle error
+                              print('Failed to increment like count: ${response.statusCode}');
+                              // Optionally revert UI state based on failure
+                              setState(() {
+                                if (_liked) {
+                                  _likeCount++;
+                                } else {
+                                  _likeCount++;
+                                }
+                               
+                              });
+                            }
                           },
                         ),
+
+                        
                         Text(
-                          '${widget.recipe['like']}',
+                          '${_likeCount + widget.recipe['like']}',
                           style: TextStyle(fontSize: 16.0),
                         ),
                       ],
