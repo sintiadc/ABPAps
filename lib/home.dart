@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'detailrecipe.dart'; // Import RecipeDetail widget
 import 'Bookmark.dart';
 import 'myrecipe.dart';
 import 'myaccount.dart';
@@ -14,44 +11,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Future<List<Map<String, dynamic>>> _futureRecipes;
+  
 
   @override
   void initState() {
     super.initState();
-    _futureRecipes = fetchRecipes();
-  }
-
-  Future<List<Map<String, dynamic>>> fetchRecipes() async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://10.0.2.2:8000/resep/getPopularRecipe'),
-      );
-
-      if (response.statusCode == 200) {
-        List<dynamic> data = json.decode(response.body);
-        List<Map<String, dynamic>> recipes = data.map((item) {
-          return {
-            'id': item['id'],
-            'name': item['name'],
-            'picture': item['picture'],
-            'calories': item['calories'],
-            'ingredients': item['ingredients'],
-            'servings': item['servings'],
-            'prep_time': item['prep_time'],
-            'meal': item['meal'],
-            'health': item['health'],
-            'detail_resep': item['detail_resep'],
-            'like': item['like'],
-          };
-        }).toList();
-        return recipes;
-      } else {
-        throw Exception('Failed to load recipes');
-      }
-    } catch (error) {
-      throw Exception('Error fetching recipes: $error');
-    }
   }
 
   @override
@@ -252,41 +216,17 @@ class _HomeState extends State<Home> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 30),
-                    FutureBuilder<List<Map<String, dynamic>>>(
-                      future: _futureRecipes,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Center(child: Text('Error: ${snapshot.error}'));
-                        } else if (snapshot.hasData) {
-                          return GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 20.0,
-                              mainAxisSpacing: 20.0,
-                            ),
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              Map<String, dynamic> recipe = snapshot.data![index];
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RecipeDetail(recipe: recipe),
-                                    ),
-                                  );
-                                },
-                                child: _buildPopularFoodItem(recipe),
-                              );
-                            },
-                          );
-                        } else {
-                          return Center(child: Text('No data available'));
-                        }
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 20.0,
+                        mainAxisSpacing: 20.0,
+                      ),
+                      itemCount: 9,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _buildPopularFoodItem(index);
                       },
                     ),
                   ],
@@ -299,7 +239,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildServiceItem(String imagePath, String description, double fontSize) {
+  Widget _buildServiceItem(
+      String imagePath, String description, double fontSize) {
     return Column(
       children: [
         SizedBox(height: 10),
@@ -320,14 +261,36 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget _buildPopularFoodItem(int index) {
+    List<String> titles = [
+      'Klean Bowl',
+      'Soup Bowl',
+      'Salad Bowl',
+      'Salad Bowl',
+      'Soup Bowl',
+      'Klean Bowl',
+      'Klean Bowl',
+      'Soup Bowl',
+      'Salad Bowl'
+    ];
+    List<String> imagePaths = [
+      'img/PFPict1.png',
+      'img/PFPict2.png',
+      'img/PFPict3.png',
+      'img/PFPict3.png',
+      'img/PFPict2.png',
+      'img/PFPict1.png',
+      'img/PFPict1.png',
+      'img/PFPict2.png',
+      'img/PFPict3.png',
+    ];
 
-  Widget _buildPopularFoodItem(Map<String, dynamic> recipe) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: const Color(0xFFF5F1EC),
+        color: const Color(0xFFF5F1EC), // Warna latar belakang kotak
         border: Border.all(
-          color: const Color(0xFF6C7E46),
+          color: const Color(0xFF6C7E46), // Warna pinggiran kotak
           width: 2.0,
         ),
       ),
@@ -336,29 +299,19 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RecipeDetail(recipe: recipe),
-                  ),
-                );
-              },
-              child: Image.network(
-                recipe['picture'],
-                width: 80,
-                height: 80,
-              ),
+            child: Image.asset(
+              imagePaths[index % imagePaths.length],
+              width: 80,
+              height: 80,
             ),
           ),
           SizedBox(height: 10),
           Text(
-            recipe['name'],
+            titles[index % titles.length],
             style: TextStyle(
               fontSize: 12,
               color: Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.bold, // Tebalkan teks
             ),
             textAlign: TextAlign.center,
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RecipeDetail extends StatefulWidget {
   final Map<String, dynamic> recipe;
@@ -13,6 +14,54 @@ class RecipeDetail extends StatefulWidget {
 class _RecipeDetailState extends State<RecipeDetail> {
   int _likeCount = 0;
   bool _liked = false;
+  bool _bookmarked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _likeCount = widget.recipe['like'];
+    _liked = false;
+    _bookmarked = widget.recipe['bookmarked'] ?? false;
+  }
+
+  Future<void> _toggleLike() async {
+    setState(() {
+      _liked = !_liked;
+      _likeCount = _liked ? _likeCount + 1 : _likeCount - 1;
+    });
+
+    final response = await http.get(
+      Uri.parse(
+          'http://10.0.2.2:8000/resep/tambah-like/${widget.recipe['id']}'),
+    );
+
+    if (response.statusCode != 200) {
+      setState(() {
+        _liked = !_liked;
+        _likeCount = _liked ? _likeCount + 1 : _likeCount - 1;
+      });
+      print('Failed to increment like count: ${response.statusCode}');
+    }
+  }
+
+  Future<void> _toggleBookmark() async {
+    setState(() {
+      _bookmarked = !_bookmarked;
+    });
+
+    final url = _bookmarked
+        ? 'http://10.0.2.2:8000/resep/bookmark/${widget.recipe['id']}'
+        : 'http://10.0.2.2:8000/resep/unbookmark/${widget.recipe['id']}';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode != 200) {
+      setState(() {
+        _bookmarked = !_bookmarked;
+      });
+      print('Gagal untuk toggle bookmark: ${response.statusCode}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +83,17 @@ class _RecipeDetailState extends State<RecipeDetail> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  clipBehavior: Clip.antiAlias, // Ensure the image stays within the border
+                  clipBehavior: Clip
+                      .antiAlias, // Ensure the image stays within the border
                   height: 200.0,
                   width: 200.0,
                   child: Image.network(
                     widget.recipe['picture'],
                     fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                      return const Icon(Icons.broken_image, size: 200, color: Colors.red);
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return const Icon(Icons.broken_image,
+                          size: 200, color: Colors.red);
                     },
                   ),
                 ),
@@ -82,50 +134,21 @@ class _RecipeDetailState extends State<RecipeDetail> {
                     SizedBox(height: 10.0),
                     Row(
                       children: [
-
                         IconButton(
-                          icon: Icon(_liked ? Icons.thumb_up : Icons.thumb_up_alt_outlined),
-                          onPressed: () async {
-                            setState(() {
-                              if (_liked) {
-                                _likeCount++;
-                              } else {
-                                _likeCount++;
-                              }
-                             
-                            });
-
-                            // Send HTTP request to increment like count
-                            final response = await http.get(
-                              Uri.parse('http://10.0.2.2:8000/resep/tambah-like/${widget.recipe['id']}'),
-                            );
-
-                            if (response.statusCode == 200) {
-                              // Successfully incremented like count
-                              // Update UI or handle response data as needed
-                              // Example: Update like count from response data if necessary
-                              // final responseData = json.decode(response.body);
-                              // _likeCount = responseData['new_like_count'];
-                            } else {
-                              // Failed to increment like count, handle error
-                              print('Failed to increment like count: ${response.statusCode}');
-                              // Optionally revert UI state based on failure
-                              setState(() {
-                                if (_liked) {
-                                  _likeCount++;
-                                } else {
-                                  _likeCount++;
-                                }
-                               
-                              });
-                            }
-                          },
+                          icon: Icon(_liked
+                              ? Icons.thumb_up
+                              : Icons.thumb_up_alt_outlined),
+                          onPressed: _toggleLike,
                         ),
-
-                        
                         Text(
-                          '${_likeCount + widget.recipe['like']}',
+                          '$_likeCount',
                           style: TextStyle(fontSize: 16.0),
+                        ),
+                        IconButton(
+                          icon: Icon(_bookmarked
+                              ? Icons.bookmark
+                              : Icons.bookmark_outline),
+                          onPressed: _toggleBookmark,
                         ),
                       ],
                     ),
@@ -153,7 +176,8 @@ class _RecipeDetailState extends State<RecipeDetail> {
                       ),
                     ),
                     SizedBox(height: 10.0),
-                    for (var ingredient in widget.recipe['ingredients'].split(','))
+                    for (var ingredient
+                        in widget.recipe['ingredients'].split(','))
                       Text(
                         '- $ingredient',
                         style: TextStyle(fontSize: 16.0),
@@ -182,7 +206,8 @@ class _RecipeDetailState extends State<RecipeDetail> {
                       ),
                     ),
                     SizedBox(height: 10.0),
-                    for (var instruction in widget.recipe['detail_resep'].split(','))
+                    for (var instruction
+                        in widget.recipe['detail_resep'].split(','))
                       Text(
                         instruction,
                         style: TextStyle(fontSize: 16.0),
