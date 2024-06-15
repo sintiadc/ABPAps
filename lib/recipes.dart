@@ -144,68 +144,78 @@ class _RecipesState extends State<Recipes> {
             itemCount: recipes.length,
             itemBuilder: (context, index) {
               final recipe = recipes[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.network(
-                            recipe['picture'],
-                            height: 150,
-                            fit: BoxFit.cover,
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RecipeDetail(recipe: recipe),
+                    ),
+                  );
+                },
+                child: Card(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              recipe['picture'],
+                              height: 150,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              recipe['name'],
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text('Calories: ${recipe['calories']}'),
-                            Text('Servings: ${recipe['servings']}'),
-                            Text('Prep Time: ${recipe['prep_time']}'),
-                            Text('Meal: ${recipe['meal']}'),
-                            Text('Health: ${recipe['health']}'),
-                            const SizedBox(height: 10),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RecipeDetail(recipe: recipe),
-                                    ),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFF6C7E46),
-                                ),
-                                child: const Text(
-                                  'View Details',
-                                  style: TextStyle(color: Colors.white),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                recipe['name'],
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 5),
+                              Text('Calories: ${recipe['calories']}'),
+                              Text('Servings: ${recipe['servings']}'),
+                              Text('Prep Time: ${recipe['prep_time']}'),
+                              Text('Meal: ${recipe['meal']}'),
+                              Text('Health: ${recipe['health']}'),
+                              const SizedBox(height: 10),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => RecipeDetail(recipe: recipe),
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color(0xFF6C7E46),
+                                  ),
+                                  child: const Text(
+                                    'View Details',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
