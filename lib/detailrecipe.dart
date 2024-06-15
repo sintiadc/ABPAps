@@ -27,7 +27,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
   Future<void> _toggleLike() async {
     setState(() {
       _liked = !_liked;
-      _likeCount = _liked ? _likeCount + 1 : _likeCount - 1;
+      _likeCount = _likeCount + 1;
     });
 
     final response = await http.get(
@@ -38,9 +38,8 @@ class _RecipeDetailState extends State<RecipeDetail> {
     if (response.statusCode != 200) {
       setState(() {
         _liked = !_liked;
-        _likeCount = _liked ? _likeCount + 1 : _likeCount - 1;
       });
-      print('Failed to increment like count: ${response.statusCode}');
+      print('Increment like count: ${response.statusCode}');
     }
   }
 
@@ -49,18 +48,47 @@ class _RecipeDetailState extends State<RecipeDetail> {
       _bookmarked = !_bookmarked;
     });
 
-    final url = _bookmarked
-        ? 'http://10.0.2.2:8000/resep/bookmark/${widget.recipe['id']}'
-        : 'http://10.0.2.2:8000/resep/unbookmark/${widget.recipe['id']}';
+    final url = 'http://10.0.2.2:8000/api/v1/myresep/addBookmark';
 
-    final response = await http.get(Uri.parse(url));
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'user_id': 1,  // Ganti dengan user_id yang sesuai
+        'resep_id': widget.recipe['id']
+      }),
+    );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
       setState(() {
         _bookmarked = !_bookmarked;
       });
-      print('Gagal untuk toggle bookmark: ${response.statusCode}');
+
+      final responseData = json.decode(response.body);
+      _showPopupMessage('Bookmark', responseData['message']);
+    } else {
+      _showPopupMessage('Failed to update bookmark', response.body);
     }
+  }
+
+  void _showPopupMessage(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

@@ -6,7 +6,9 @@ import 'calories.dart';
 import 'create.dart';
 
 class HomeNav extends StatefulWidget {
-  const HomeNav({super.key});
+  final int userId; // Tambahkan parameter userId
+
+  const HomeNav({Key? key, required this.userId}) : super(key: key);
 
   @override
   State<HomeNav> createState() => _HomeNavState();
@@ -14,12 +16,19 @@ class HomeNav extends StatefulWidget {
 
 class _HomeNavState extends State<HomeNav> {
   int _selectedIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[
-    Home(), // Menambahkan Home sebagai halaman pertama
-    Recipes(),
-    Calories(),
-    Create(),
-  ];
+
+  late List<Widget> _widgetOptions;
+
+  @override
+  void initState() {
+    super.initState();
+    _widgetOptions = <Widget>[
+      Home(userId: widget.userId), // Berikan userId ke Home
+      Recipes(), // Berikan userId ke Recipes
+      Calories(), // Berikan userId ke Calories
+      Create(), // Berikan userId ke Create
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -35,11 +44,11 @@ class _HomeNavState extends State<HomeNav> {
       ),
       bottomNavigationBar: GNav(
         gap: 8,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         tabBorderRadius: 15,
         activeColor: Colors.white,
         color: Colors.black,
-        backgroundColor: Color(0xFF6C7E46),
+        backgroundColor: const Color(0xFF6C7E46),
         tabs: const [
           GButton(
             icon: Icons.home,
